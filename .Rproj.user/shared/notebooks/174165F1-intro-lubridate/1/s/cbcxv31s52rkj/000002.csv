@@ -1,0 +1,13 @@
+"0","# Use read_csv() to import rversions.csv"
+"0","releases <- read_csv(""https://assets.datacamp.com/production/course_5348/datasets/rversions.csv"")"
+"2","Parsed with column specification:
+cols(
+  major = [32mcol_double()[39m,
+  minor = [32mcol_double()[39m,
+  patch = [32mcol_double()[39m,
+  date = [34mcol_date(format = """")[39m,
+  datetime = [34mcol_datetime(format = """")[39m,
+  time = [34mcol_time(format = """")[39m,
+  type = [31mcol_character()[39m
+)
+"

@@ -1,0 +1,3 @@
+"0","# Plot to check work"
+"0","ggplot(akl_daily, aes(x = date, y = max_temp)) +"
+"0","  geom_line()"

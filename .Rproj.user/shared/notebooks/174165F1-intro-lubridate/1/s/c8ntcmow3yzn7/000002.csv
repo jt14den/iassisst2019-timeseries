@@ -1,0 +1,4 @@
+"0","# Plot barchart of weekday by type of release"
+"0","ggplot(releases, aes(wday)) +"
+"0","  geom_bar() +"
+"0","  facet_wrap(~ type, ncol = 1, scale = ""free_y"")"

@@ -1,0 +1,7 @@
+"0","#lets store in a var called `this_day`"
+"0","this_day <- today()"
+"0","this_day"
+"1","[1]"
+"1"," ""2019-05-26"""
+"1","
+"

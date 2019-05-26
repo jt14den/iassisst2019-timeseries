@@ -1,0 +1,7 @@
+"0","# Specify an order string to parse x"
+"0","x <- ""Monday May 26th 2019 at 1pm"""
+"0","parse_date_time(x, orders = ""amdyIp"")"
+"1","[1]"
+"1"," ""2019-05-26 13:00:00 UTC"""
+"1","
+"

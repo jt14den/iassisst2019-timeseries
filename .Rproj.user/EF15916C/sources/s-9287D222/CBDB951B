@@ -1,0 +1,26 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1558666571946.000,
+    "dirty" : false,
+    "encoding" : "UTF-8",
+    "folds" : "",
+    "hash" : "2282039805",
+    "id" : "CBDB951B",
+    "lastKnownWriteTime" : 1558747110,
+    "last_content_update" : 1558747110576,
+    "path" : "~/Desktop/lubridate/intro-lubridate.Rmd",
+    "project_path" : "intro-lubridate.Rmd",
+    "properties" : {
+        "cursorPosition" : "9,18",
+        "last_setup_crc32" : "9287D222740d1c70",
+        "scrollLine" : "0"
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_markdown"
+}

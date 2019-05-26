@@ -1,0 +1,13 @@
+"0","# Import CSV with read_csv()"
+"0","akl_daily_raw <- read_csv(""https://assets.datacamp.com/production/course_5348/datasets/akl_weather_daily.csv"")"
+"2","Parsed with column specification:
+cols(
+  date = [31mcol_character()[39m,
+  max_temp = [32mcol_double()[39m,
+  min_temp = [32mcol_double()[39m,
+  mean_temp = [32mcol_double()[39m,
+  mean_rh = [32mcol_double()[39m,
+  events = [31mcol_character()[39m,
+  cloud_cover = [32mcol_double()[39m
+)
+"

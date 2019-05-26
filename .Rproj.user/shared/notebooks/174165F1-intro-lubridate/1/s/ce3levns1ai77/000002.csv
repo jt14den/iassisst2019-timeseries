@@ -1,0 +1,2 @@
+"0","# Create column wday to hold week days"
+"0","releases$wday <- wday(releases$datetime, label = TRUE)"

@@ -1,0 +1,2 @@
+"0","ggplot(akl_daily, aes(x = yday, y = max_temp)) +"
+"0","  geom_line(aes(group = year), alpha = 0.5)"

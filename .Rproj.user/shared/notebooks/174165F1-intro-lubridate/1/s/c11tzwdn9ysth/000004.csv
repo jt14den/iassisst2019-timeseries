@@ -1,0 +1,5 @@
+"0","# Summarise for each month, the number of days with rain"
+"0","rainy_days %>% "
+"0","  summarise("
+"0","    days_rainy = sum(any_rain)"
+"0","  )"

@@ -1,0 +1,2 @@
+"0","# Print date, time and datetime columns of akl_hourly"
+"0","akl_hourly %>% select(date, time, datetime)"

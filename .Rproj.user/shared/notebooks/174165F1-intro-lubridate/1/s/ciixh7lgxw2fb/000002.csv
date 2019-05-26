@@ -1,0 +1,6 @@
+"0","# How often is the release in am?"
+"0","mean(am(release_time))"
+"1","[1]"
+"1"," 0.752381"
+"1","
+"

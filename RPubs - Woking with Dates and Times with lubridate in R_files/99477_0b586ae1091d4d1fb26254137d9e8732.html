@@ -1,0 +1,404 @@
+<!DOCTYPE html>
+<!-- saved from url=(0098)https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#lubridate -->
+<html xmlns="http://www.w3.org/1999/xhtml"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+
+
+
+<meta name="generator" content="pandoc">
+
+<meta name="author" content="Davood Astaraky">
+
+
+<title>Woking with Dates and Times with lubridate in R</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; }
+code > span.dt { color: #902000; }
+code > span.dv { color: #40a070; }
+code > span.bn { color: #40a070; }
+code > span.fl { color: #40a070; }
+code > span.ch { color: #4070a0; }
+code > span.st { color: #4070a0; }
+code > span.co { color: #60a0b0; font-style: italic; }
+code > span.ot { color: #007020; }
+code > span.al { color: #ff0000; font-weight: bold; }
+code > span.fu { color: #06287e; }
+code > span.er { color: #ff0000; font-weight: bold; }
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+<link href="data:text/css,body%20%7B%0A%20%20background%2Dcolor%3A%20%23fff%3B%0A%20%20margin%3A%201em%20auto%3B%0A%20%20max%2Dwidth%3A%20800px%3B%0A%20%20overflow%3A%20visible%3B%0A%20%20padding%2Dleft%3A%202em%3B%0A%20%20padding%2Dright%3A%202em%3B%0A%20%20font%2Dfamily%3A%20%22Helvetica%20Neue%22%2C%20Helvetica%2C%20Arial%2C%20sans%2Dserif%3B%0A%20%20font%2Dsize%3A%2014px%3B%0A%20%20line%2Dheight%3A%2020px%3B%0A%7D%0A%0A%23header%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0A%0A%23TOC%20%7B%0A%20%20clear%3A%20both%3B%0A%20%20margin%3A%200%200%2010px%200%3B%0A%20%20padding%3A%204px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20border%2Dradius%3A%205px%3B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20font%2Dsize%3A%2013px%3B%0A%20%20line%2Dheight%3A%201%2E3%3B%0A%7D%0A%20%20%23TOC%20%2Etoctitle%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%20%20font%2Dsize%3A%2015px%3B%0A%20%20%20%20margin%2Dleft%3A%205px%3B%0A%20%20%7D%0A%0A%20%20%23TOC%20ul%20%7B%0A%20%20%20%20padding%2Dleft%3A%2040px%3B%0A%20%20%20%20margin%2Dleft%3A%20%2D1%2E5em%3B%0A%20%20%20%20margin%2Dtop%3A%205px%3B%0A%20%20%20%20margin%2Dbottom%3A%205px%3B%0A%20%20%7D%0A%20%20%23TOC%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dleft%3A%20%2D2em%3B%0A%20%20%7D%0A%20%20%23TOC%20li%20%7B%0A%20%20%20%20line%2Dheight%3A%2016px%3B%0A%20%20%7D%0A%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20margin%3A%20auto%3B%0A%20%20min%2Dwidth%3A%2040%25%3B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dcolor%3A%20%23DDDDDD%3B%0A%20%20border%2Dstyle%3A%20outset%3B%0A%20%20border%2Dcollapse%3A%20collapse%3B%0A%7D%0Atable%5Bsummary%3D%22R%20argblock%22%5D%20%7B%0A%20%20width%3A%20100%25%3B%0A%20%20border%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20th%20%7B%0A%20%20border%2Dwidth%3A%202px%3B%0A%20%20padding%3A%205px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20td%20%7B%0A%20%20border%2Dwidth%3A%201px%3B%0A%20%20border%2Dstyle%3A%20inset%3B%0A%20%20line%2Dheight%3A%2018px%3B%0A%20%20padding%3A%205px%205px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%2C%20table%3Anot%28%5Bclass%5D%29%20th%2C%20table%3Anot%28%5Bclass%5D%29%20td%20%7B%0A%20%20border%2Dleft%2Dstyle%3A%20none%3B%0A%20%20border%2Dright%2Dstyle%3A%20none%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20tr%2Eodd%20%7B%0A%20%20background%2Dcolor%3A%20%23f7f7f7%3B%0A%7D%0A%0Ap%20%7B%0A%20%20margin%3A%200%2E5em%200%3B%0A%7D%0A%0Ablockquote%20%7B%0A%20%20background%2Dcolor%3A%20%23f6f6f6%3B%0A%20%20padding%3A%2013px%3B%0A%20%20padding%2Dbottom%3A%201px%3B%0A%7D%0A%0Ahr%20%7B%0A%20%20border%2Dstyle%3A%20solid%3B%0A%20%20border%3A%20none%3B%0A%20%20border%2Dtop%3A%201px%20solid%20%23777%3B%0A%20%20margin%3A%2028px%200%3B%0A%7D%0A%0Adl%20%7B%0A%20%20margin%2Dleft%3A%200%3B%0A%7D%0A%20%20dl%20dd%20%7B%0A%20%20%20%20margin%2Dbottom%3A%2013px%3B%0A%20%20%20%20margin%2Dleft%3A%2013px%3B%0A%20%20%7D%0A%20%20dl%20dt%20%7B%0A%20%20%20%20font%2Dweight%3A%20bold%3B%0A%20%20%7D%0A%0Aul%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%7D%0A%20%20ul%20li%20%7B%0A%20%20%20%20list%2Dstyle%3A%20circle%20outside%3B%0A%20%20%7D%0A%20%20ul%20ul%20%7B%0A%20%20%20%20margin%2Dbottom%3A%200%3B%0A%20%20%7D%0A%0Apre%2C%20code%20%7B%0A%20%20background%2Dcolor%3A%20%23f5f5f5%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20color%3A%20%23333%3B%0A%7D%0Apre%20%7B%0A%20%20overflow%2Dx%3A%20auto%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20margin%3A%205px%200%2010px%200%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20white%3B%0A%20%20border%3A%20%23f5f5f5%201px%20solid%3B%0A%7D%0Apre%3Anot%28%5Bclass%5D%29%20code%20%7B%0A%20%20color%3A%20%23444%3B%0A%20%20background%2Dcolor%3A%20white%3B%0A%7D%0Acode%20%7B%0A%20%20font%2Dfamily%3A%20monospace%3B%0A%20%20font%2Dsize%3A%2090%25%3B%0A%7D%0Ap%20%3E%20code%2C%20li%20%3E%20code%20%7B%0A%20%20padding%3A%202px%204px%3B%0A%20%20color%3A%20%23d14%3B%0A%20%20border%3A%201px%20solid%20%23e1e1e8%3B%0A%20%20white%2Dspace%3A%20inherit%3B%0A%7D%0Adiv%2Efigure%20%7B%0A%20%20text%2Dalign%3A%20center%3B%0A%7D%0Atable%20%3E%20caption%2C%20div%2Efigure%20p%2Ecaption%20%7B%0A%20%20font%2Dstyle%3A%20italic%3B%0A%7D%0Atable%20%3E%20caption%20span%2C%20div%2Efigure%20p%2Ecaption%20span%20%7B%0A%20%20font%2Dstyle%3A%20normal%3B%0A%20%20font%2Dweight%3A%20bold%3B%0A%7D%0Ap%20%7B%0A%20%20margin%3A%200%200%2010px%3B%0A%7D%0Atable%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20margin%3A%20auto%20auto%2010px%20auto%3B%0A%7D%0A%0Aimg%3Anot%28%5Bclass%5D%29%20%7B%0A%20%20background%2Dcolor%3A%20%23FFFFFF%3B%0A%20%20padding%3A%202px%3B%0A%20%20border%2Dradius%3A%203px%3B%0A%20%20border%3A%201px%20solid%20%23CCCCCC%3B%0A%20%20margin%3A%200%205px%3B%0A%20%20max%2Dwidth%3A%20100%25%3B%0A%7D%0A%0Ah1%20%7B%0A%20%20margin%2Dtop%3A%200%3B%0A%20%20font%2Dsize%3A%2035px%3B%0A%20%20line%2Dheight%3A%2040px%3B%0A%7D%0A%0Ah2%20%7B%0A%20%20border%2Dbottom%3A%204px%20solid%20%23f5f5f5%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20padding%2Dbottom%3A%202px%3B%0A%20%20font%2Dsize%3A%20145%25%3B%0A%7D%0A%0Ah3%20%7B%0A%20%20border%2Dbottom%3A%202px%20solid%20%23f5f5f5%3B%0A%20%20padding%2Dtop%3A%2010px%3B%0A%20%20font%2Dsize%3A%20120%25%3B%0A%7D%0A%0Ah4%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23f5f5f5%3B%0A%20%20margin%2Dleft%3A%208px%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Ah5%2C%20h6%20%7B%0A%20%20border%2Dbottom%3A%201px%20solid%20%23ccc%3B%0A%20%20font%2Dsize%3A%20105%25%3B%0A%7D%0A%0Aa%20%7B%0A%20%20color%3A%20%230033dd%3B%0A%20%20text%2Ddecoration%3A%20none%3B%0A%7D%0A%20%20a%3Ahover%20%7B%0A%20%20%20%20color%3A%20%236666ff%3B%20%7D%0A%20%20a%3Avisited%20%7B%0A%20%20%20%20color%3A%20%23800080%3B%20%7D%0A%20%20a%3Avisited%3Ahover%20%7B%0A%20%20%20%20color%3A%20%23BB00BB%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22http%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%20%20a%5Bhref%5E%3D%22https%3A%22%5D%20%7B%0A%20%20%20%20text%2Ddecoration%3A%20underline%3B%20%7D%0A%0Adiv%2Er%2Dhelp%2Dpage%20%7B%0A%20%20background%2Dcolor%3A%20%23f9f9f9%3B%0A%20%20border%2Dbottom%3A%20%23ddd%201px%20solid%3B%0A%20%20margin%2Dbottom%3A%2010px%3B%0A%20%20padding%3A%2010px%3B%0A%7D%0Adiv%2Er%2Dhelp%2Dpage%3Ahover%20%7B%0A%20%20background%2Dcolor%3A%20%23f4f4f4%3B%0A%7D%0A%0A%2F%2A%20Class%20described%20in%20https%3A%2F%2Fbenjeffrey%2Ecom%2Fposts%2Fpandoc%2Dsyntax%2Dhighlighting%2Dcss%0A%20%20%20Colours%20from%20https%3A%2F%2Fgist%2Egithub%2Ecom%2Frobsimmons%2F1172277%20%2A%2F%0A%0Acode%20%3E%20span%2Ekw%20%7B%20color%3A%20%23555%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Keyword%20%2A%2F%0Acode%20%3E%20span%2Edt%20%7B%20color%3A%20%23902000%3B%20%7D%20%2F%2A%20DataType%20%2A%2F%0Acode%20%3E%20span%2Edv%20%7B%20color%3A%20%2340a070%3B%20%7D%20%2F%2A%20DecVal%20%28decimal%20values%29%20%2A%2F%0Acode%20%3E%20span%2Ebn%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20BaseN%20%2A%2F%0Acode%20%3E%20span%2Efl%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Float%20%2A%2F%0Acode%20%3E%20span%2Ech%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20Char%20%2A%2F%0Acode%20%3E%20span%2Est%20%7B%20color%3A%20%23d14%3B%20%7D%20%2F%2A%20String%20%2A%2F%0Acode%20%3E%20span%2Eco%20%7B%20color%3A%20%23888888%3B%20font%2Dstyle%3A%20italic%3B%20%7D%20%2F%2A%20Comment%20%2A%2F%0Acode%20%3E%20span%2Eot%20%7B%20color%3A%20%23007020%3B%20%7D%20%2F%2A%20OtherToken%20%2A%2F%0Acode%20%3E%20span%2Eal%20%7B%20color%3A%20%23ff0000%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20AlertToken%20%2A%2F%0Acode%20%3E%20span%2Efu%20%7B%20color%3A%20%23900%3B%20font%2Dweight%3A%20bold%3B%20%7D%20%2F%2A%20Function%20calls%20%2A%2F%0Acode%20%3E%20span%2Eer%20%7B%20color%3A%20%23a61717%3B%20background%2Dcolor%3A%20%23e3d2d2%3B%20%7D%20%2F%2A%20ErrorTok%20%2A%2F%0A%0A" rel="stylesheet" type="text/css">
+
+<script src="./MathJax.js" id=""></script><style type="text/css">.MathJax_Hover_Frame {border-radius: .25em; -webkit-border-radius: .25em; -moz-border-radius: .25em; -khtml-border-radius: .25em; box-shadow: 0px 0px 15px #83A; -webkit-box-shadow: 0px 0px 15px #83A; -moz-box-shadow: 0px 0px 15px #83A; -khtml-box-shadow: 0px 0px 15px #83A; border: 1px solid #A6D ! important; display: inline-block; position: absolute}
+.MathJax_Menu_Button .MathJax_Hover_Arrow {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; -khtml-border-radius: 4px; font-family: 'Courier New',Courier; font-size: 9px; color: #F0F0F0}
+.MathJax_Menu_Button .MathJax_Hover_Arrow span {display: block; background-color: #AAA; border: 1px solid; border-radius: 3px; line-height: 0; padding: 4px}
+.MathJax_Hover_Arrow:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_Hover_Arrow:hover span {background-color: #CCC!important}
+</style><style type="text/css">#MathJax_About {position: fixed; left: 50%; width: auto; text-align: center; border: 3px outset; padding: 1em 2em; background-color: #DDDDDD; color: black; cursor: default; font-family: message-box; font-size: 120%; font-style: normal; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 15px; -webkit-border-radius: 15px; -moz-border-radius: 15px; -khtml-border-radius: 15px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_About.MathJax_MousePost {outline: none}
+.MathJax_Menu {position: absolute; background-color: white; color: black; width: auto; padding: 5px 0px; border: 1px solid #CCCCCC; margin: 0; cursor: default; font: menu; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; z-index: 201; border-radius: 5px; -webkit-border-radius: 5px; -moz-border-radius: 5px; -khtml-border-radius: 5px; box-shadow: 0px 10px 20px #808080; -webkit-box-shadow: 0px 10px 20px #808080; -moz-box-shadow: 0px 10px 20px #808080; -khtml-box-shadow: 0px 10px 20px #808080; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+.MathJax_MenuItem {padding: 1px 2em; background: transparent}
+.MathJax_MenuArrow {position: absolute; right: .5em; padding-top: .25em; color: #666666; font-size: .75em}
+.MathJax_MenuActive .MathJax_MenuArrow {color: white}
+.MathJax_MenuArrow.RTL {left: .5em; right: auto}
+.MathJax_MenuCheck {position: absolute; left: .7em}
+.MathJax_MenuCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuRadioCheck {position: absolute; left: .7em}
+.MathJax_MenuRadioCheck.RTL {right: .7em; left: auto}
+.MathJax_MenuLabel {padding: 1px 2em 3px 1.33em; font-style: italic}
+.MathJax_MenuRule {border-top: 1px solid #DDDDDD; margin: 4px 3px}
+.MathJax_MenuDisabled {color: GrayText}
+.MathJax_MenuActive {background-color: #606872; color: white}
+.MathJax_MenuDisabled:focus, .MathJax_MenuLabel:focus {background-color: #E8E8E8}
+.MathJax_ContextMenu:focus {outline: none}
+.MathJax_ContextMenu .MathJax_MenuItem:focus {outline: none}
+#MathJax_AboutClose {top: .2em; right: .2em}
+.MathJax_Menu .MathJax_MenuClose {top: -10px; left: -10px}
+.MathJax_MenuClose {position: absolute; cursor: pointer; display: inline-block; border: 2px solid #AAA; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; font-family: 'Courier New',Courier; font-size: 24px; color: #F0F0F0}
+.MathJax_MenuClose span {display: block; background-color: #AAA; border: 1.5px solid; border-radius: 18px; -webkit-border-radius: 18px; -moz-border-radius: 18px; -khtml-border-radius: 18px; line-height: 0; padding: 8px 0 6px}
+.MathJax_MenuClose:hover {color: white!important; border: 2px solid #CCC!important}
+.MathJax_MenuClose:hover span {background-color: #CCC!important}
+.MathJax_MenuClose:hover:focus {outline: none}
+</style><style type="text/css">.MathJax_Preview .MJXf-math {color: inherit!important}
+</style><style type="text/css">.MJX_Assistive_MathML {position: absolute!important; top: 0; left: 0; clip: rect(1px, 1px, 1px, 1px); padding: 1px 0 0 0!important; border: 0!important; height: 1px!important; width: 1px!important; overflow: hidden!important; display: block!important; -webkit-touch-callout: none; -webkit-user-select: none; -khtml-user-select: none; -moz-user-select: none; -ms-user-select: none; user-select: none}
+.MJX_Assistive_MathML.MJX_Assistive_MathML_Block {width: 100%!important}
+</style><style type="text/css">#MathJax_Zoom {position: absolute; background-color: #F0F0F0; overflow: auto; display: block; z-index: 301; padding: .5em; border: 1px solid black; margin: 0; font-weight: normal; font-style: normal; text-align: left; text-indent: 0; text-transform: none; line-height: normal; letter-spacing: normal; word-spacing: normal; word-wrap: normal; white-space: nowrap; float: none; -webkit-box-sizing: content-box; -moz-box-sizing: content-box; box-sizing: content-box; box-shadow: 5px 5px 15px #AAAAAA; -webkit-box-shadow: 5px 5px 15px #AAAAAA; -moz-box-shadow: 5px 5px 15px #AAAAAA; -khtml-box-shadow: 5px 5px 15px #AAAAAA; filter: progid:DXImageTransform.Microsoft.dropshadow(OffX=2, OffY=2, Color='gray', Positive='true')}
+#MathJax_ZoomOverlay {position: absolute; left: 0; top: 0; z-index: 300; display: inline-block; width: 100%; height: 100%; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+#MathJax_ZoomFrame {position: relative; display: inline-block; height: 0; width: 0}
+#MathJax_ZoomEventTrap {position: absolute; left: 0; top: 0; z-index: 302; display: inline-block; border: 0; padding: 0; margin: 0; background-color: white; opacity: 0; filter: alpha(opacity=0)}
+</style><style type="text/css">.MathJax_Preview {color: #888}
+#MathJax_Message {position: fixed; left: 1em; bottom: 1.5em; background-color: #E6E6E6; border: 1px solid #959595; margin: 0px; padding: 2px 8px; z-index: 102; color: black; font-size: 80%; width: auto; white-space: nowrap}
+#MathJax_MSIE_Frame {position: absolute; top: 0; left: 0; width: 0px; z-index: 101; border: 0px; margin: 0px; padding: 0px}
+.MathJax_Error {color: #CC0000; font-style: italic}
+</style><style type="text/css">.MJXp-script {font-size: .8em}
+.MJXp-right {-webkit-transform-origin: right; -moz-transform-origin: right; -ms-transform-origin: right; -o-transform-origin: right; transform-origin: right}
+.MJXp-bold {font-weight: bold}
+.MJXp-italic {font-style: italic}
+.MJXp-scr {font-family: MathJax_Script,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-frak {font-family: MathJax_Fraktur,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-sf {font-family: MathJax_SansSerif,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-cal {font-family: MathJax_Caligraphic,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-mono {font-family: MathJax_Typewriter,'Times New Roman',Times,STIXGeneral,serif}
+.MJXp-largeop {font-size: 150%}
+.MJXp-largeop.MJXp-int {vertical-align: -.2em}
+.MJXp-math {display: inline-block; line-height: 1.2; text-indent: 0; font-family: 'Times New Roman',Times,STIXGeneral,serif; white-space: nowrap; border-collapse: collapse}
+.MJXp-display {display: block; text-align: center; margin: 1em 0}
+.MJXp-math span {display: inline-block}
+.MJXp-box {display: block!important; text-align: center}
+.MJXp-box:after {content: " "}
+.MJXp-rule {display: block!important; margin-top: .1em}
+.MJXp-char {display: block!important}
+.MJXp-mo {margin: 0 .15em}
+.MJXp-mfrac {margin: 0 .125em; vertical-align: .25em}
+.MJXp-denom {display: inline-table!important; width: 100%}
+.MJXp-denom > * {display: table-row!important}
+.MJXp-surd {vertical-align: top}
+.MJXp-surd > * {display: block!important}
+.MJXp-script-box > *  {display: table!important; height: 50%}
+.MJXp-script-box > * > * {display: table-cell!important; vertical-align: top}
+.MJXp-script-box > *:last-child > * {vertical-align: bottom}
+.MJXp-script-box > * > * > * {display: block!important}
+.MJXp-mphantom {visibility: hidden}
+.MJXp-munderover {display: inline-table!important}
+.MJXp-over {display: inline-block!important; text-align: center}
+.MJXp-over > * {display: block!important}
+.MJXp-munderover > * {display: table-row!important}
+.MJXp-mtable {vertical-align: .25em; margin: 0 .125em}
+.MJXp-mtable > * {display: inline-table!important; vertical-align: middle}
+.MJXp-mtr {display: table-row!important}
+.MJXp-mtd {display: table-cell!important; text-align: center; padding: .5em 0 0 .5em}
+.MJXp-mtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-mlabeledtr {display: table-row!important}
+.MJXp-mlabeledtr > .MJXp-mtd:first-child {padding-left: 0}
+.MJXp-mlabeledtr:first-child > .MJXp-mtd {padding-top: 0}
+.MJXp-merror {background-color: #FFFF88; color: #CC0000; border: 1px solid #CC0000; padding: 1px 3px; font-style: normal; font-size: 90%}
+.MJXp-scale0 {-webkit-transform: scaleX(.0); -moz-transform: scaleX(.0); -ms-transform: scaleX(.0); -o-transform: scaleX(.0); transform: scaleX(.0)}
+.MJXp-scale1 {-webkit-transform: scaleX(.1); -moz-transform: scaleX(.1); -ms-transform: scaleX(.1); -o-transform: scaleX(.1); transform: scaleX(.1)}
+.MJXp-scale2 {-webkit-transform: scaleX(.2); -moz-transform: scaleX(.2); -ms-transform: scaleX(.2); -o-transform: scaleX(.2); transform: scaleX(.2)}
+.MJXp-scale3 {-webkit-transform: scaleX(.3); -moz-transform: scaleX(.3); -ms-transform: scaleX(.3); -o-transform: scaleX(.3); transform: scaleX(.3)}
+.MJXp-scale4 {-webkit-transform: scaleX(.4); -moz-transform: scaleX(.4); -ms-transform: scaleX(.4); -o-transform: scaleX(.4); transform: scaleX(.4)}
+.MJXp-scale5 {-webkit-transform: scaleX(.5); -moz-transform: scaleX(.5); -ms-transform: scaleX(.5); -o-transform: scaleX(.5); transform: scaleX(.5)}
+.MJXp-scale6 {-webkit-transform: scaleX(.6); -moz-transform: scaleX(.6); -ms-transform: scaleX(.6); -o-transform: scaleX(.6); transform: scaleX(.6)}
+.MJXp-scale7 {-webkit-transform: scaleX(.7); -moz-transform: scaleX(.7); -ms-transform: scaleX(.7); -o-transform: scaleX(.7); transform: scaleX(.7)}
+.MJXp-scale8 {-webkit-transform: scaleX(.8); -moz-transform: scaleX(.8); -ms-transform: scaleX(.8); -o-transform: scaleX(.8); transform: scaleX(.8)}
+.MJXp-scale9 {-webkit-transform: scaleX(.9); -moz-transform: scaleX(.9); -ms-transform: scaleX(.9); -o-transform: scaleX(.9); transform: scaleX(.9)}
+.MathJax_PHTML .noError {vertical-align: ; font-size: 90%; text-align: left; color: black; padding: 1px 3px; border: 1px solid}
+</style></head>
+
+<body><div id="MathJax_Message" style="display: none;"></div>
+
+
+
+<div id="header">
+<h1 class="title">Woking with Dates and Times with lubridate in R</h1>
+<h4 class="author"><em>Davood Astaraky</em></h4>
+</div>
+
+<div id="TOC">
+<ul>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#lubridate">lubridate</a><ul>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#extract-information-from-date">Extract information from date</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#date-time">Date-time</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#parsing-dates">Parsing dates</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#parsing-date-times">Parsing date-times</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#update-date-time">Update date-time</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#dst-and-time-zones-and-arithmetic-operations">DST and time zones and arithmetic operations</a></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#date-time-interval">Date-time interval</a></li>
+</ul></li>
+<li><a href="https://rstudio-pubs-static.s3.amazonaws.com/99477_0b586ae1091d4d1fb26254137d9e8732.html#reference">Reference</a></li>
+</ul>
+</div>
+
+<p><strong>Loading Libraries</strong></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(knitr)
+<span class="kw">library</span>(printr)</code></pre>
+<div id="lubridate" class="section level2">
+<h2>lubridate</h2>
+<p>In this lesson, we’ll explore the <code>lubridate</code> R package, by Garrett Grolemund and Hadley Wickham. According to the package authors, “lubridate has a consistent, memorable syntax, that makes working with dates fun instead of frustrating.” If you’ve ever worked with dates in R, that statement probably has your attention.</p>
+<p>There are different date and time representations, in order to view our locale:</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">Sys.getlocale</span>(<span class="st">"LC_TIME"</span>)</code></pre>
+<pre><code>## [1] "en_CA.UTF-8"</code></pre>
+<p>lubridate contains many useful functions. We’ll only be covering the basics here. Type <code>help(package = lubridate)</code> to bring up an overview of the package, including the package DESCRIPTION, a list of available functions, and a link to the official package vignette.</p>
+<p>The <code>today()</code> function returns today’s date. Lets store the result in a new variable called <code>this_day</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">library</span>(lubridate)
+
+this_day &lt;-<span class="st"> </span><span class="kw">today</span>()
+this_day</code></pre>
+<pre><code>## [1] "2015-08-09"</code></pre>
+<div id="extract-information-from-date" class="section level3">
+<h3>Extract information from date</h3>
+<p>There are three components to this date. In order, they are year, month, and day. We can extract any of these components using the <code>year()</code>, <code>month()</code>, or <code>day()</code> function, respectively. We try them on <code>this_day</code> now.</p>
+<pre class="sourceCode r"><code class="sourceCode r">y &lt;-<span class="st"> </span><span class="kw">year</span>(this_day)
+m &lt;-<span class="st"> </span><span class="kw">month</span>(this_day)
+d &lt;-<span class="kw">day</span>(this_day)
+
+<span class="kw">rbind</span>(y,m,d)</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">y</td>
+<td align="right">2015</td>
+</tr>
+<tr class="even">
+<td align="left">m</td>
+<td align="right">8</td>
+</tr>
+<tr class="odd">
+<td align="left">d</td>
+<td align="right">9</td>
+</tr>
+</tbody>
+</table>
+<p>We can also get the day of the week from <code>this_day</code> using the <code>wday()</code> function. It will be represented as a number, such that <code>1 = Sunday</code>, <code>2 = Monday</code>, <code>3 = Tuesday</code>, etc. Similarly we can extract day of month and day of year.</p>
+<pre class="sourceCode r"><code class="sourceCode r">w &lt;-<span class="st"> </span><span class="kw">wday</span>(this_day)
+m &lt;-<span class="st"> </span><span class="kw">mday</span>(this_day)
+y &lt;-<span class="st"> </span><span class="kw">yday</span>(this_day)
+
+<span class="kw">rbind</span>(w,m,y)</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">w</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">m</td>
+<td align="right">9</td>
+</tr>
+<tr class="odd">
+<td align="left">y</td>
+<td align="right">221</td>
+</tr>
+</tbody>
+</table>
+<p>We can add a second argument, <code>label = TRUE</code>, to display the <em>name</em> of the weekday (represented as an ordered factor).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">wday</span>(this_day, <span class="dt">label =</span> <span class="ot">TRUE</span>)</code></pre>
+<pre><code>## [1] Sun
+## Levels: Sun &lt; Mon &lt; Tues &lt; Wed &lt; Thurs &lt; Fri &lt; Sat</code></pre>
+</div>
+<div id="date-time" class="section level3">
+<h3>Date-time</h3>
+<p>In addition to handling dates, lubridate is great for working with date and time combinations, referred to as date-times. The <code>now()</code> function returns the date-time representing this exact moment in time. We store the result in a variable called <code>this_moment</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">this_moment &lt;-<span class="st"> </span><span class="kw">now</span>()
+this_moment</code></pre>
+<pre><code>## [1] "2015-08-09 11:19:08 EDT"</code></pre>
+<p>Just like with dates, we can extract the year, month, day, or day of week. However, we can also use <code>hour()</code>, <code>minute()</code>, and <code>second()</code> to extract specific time information.</p>
+<pre class="sourceCode r"><code class="sourceCode r">hr &lt;-<span class="st"> </span><span class="kw">hour</span>(this_moment)
+minu &lt;-<span class="st"> </span><span class="kw">minute</span>(this_moment)
+sec &lt;-<span class="st"> </span><span class="kw">second</span>(this_moment)
+
+<span class="kw">rbind</span>(hr,minu,sec)</code></pre>
+<table>
+<tbody>
+<tr class="odd">
+<td align="left">hr</td>
+<td align="right">11.000000</td>
+</tr>
+<tr class="even">
+<td align="left">minu</td>
+<td align="right">19.000000</td>
+</tr>
+<tr class="odd">
+<td align="left">sec</td>
+<td align="right">8.159136</td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="parsing-dates" class="section level3">
+<h3>Parsing dates</h3>
+<p><code>today()</code> and <code>now()</code> provide neatly formatted date-time information. When working with dates and times ‘in the wild’, this won’t always (and perhaps rarely will) be the case.</p>
+<p>Fortunately, lubridate offers a variety of functions for parsing date-times. These functions take the form of <code>ymd()</code>, <code>dmy()</code>, <code>hms()</code>, <code>ymd_hms()</code>, etc., where each letter in the name of the function stands for the location of <em>years (y)</em>, <em>months (m)</em>, <em>days (d)</em>, <em>hours (h)</em>, <em>minutes (m)</em>, and/or <em>seconds (s)</em> in the date-time being read in.</p>
+<p>To see how these functions work, we try <code>ymd("1989-05-17")</code>. We must surround the date with quotes.</p>
+<pre class="sourceCode r"><code class="sourceCode r">my_date &lt;-<span class="st"> </span><span class="kw">ymd</span>(<span class="st">"1989-05-17"</span>)
+my_date</code></pre>
+<pre><code>## [1] "1989-05-17 UTC"</code></pre>
+<p>It looks almost the same, except for the addition of a time zone, which we’ll discuss later in the lesson. Below the surface, there’s another important change that takes place when lubridate parses a date.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">class</span>(my_date)</code></pre>
+<pre><code>## [1] "POSIXct" "POSIXt"</code></pre>
+<p>So <code>ymd()</code> took a character string as input and returned an object of class POSIXct. It’s not necessary that you understand what POSIXct is, but just know that it is one way that R stores date-time information internally.</p>
+<p>“1989-05-17” is a fairly standard format, but lubridate is <em>smart</em> enough to figure out many different date-time formats. We use ymd() to parse “1989 May 17”.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ymd</span>(<span class="st">"1989 May 17"</span>)</code></pre>
+<pre><code>## [1] "1989-05-17 UTC"</code></pre>
+<p>Despite being formatted differently, the last two dates had the year first, then the month, then the day. Hence, we used <code>ymd()</code> to parse them. What about the appropriate function is for parsing “March 12, 1975” ?</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mdy</span>(<span class="st">"March 12, 1975"</span>)</code></pre>
+<pre><code>## [1] "1975-03-12 UTC"</code></pre>
+<p>We can even throw something funky at it and lubridate will often know the right thing to do. Lets parse <code>25081985</code>, which is supposed to represent the 25th day of August 1985. Note that we are actually parsing a numeric value here – not a character string – so leave off the quotes.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">dmy</span>(<span class="dv">25081985</span>)</code></pre>
+<pre><code>## [1] "1985-08-25 UTC"</code></pre>
+<p>But be careful, it’s not magic. Lets try <code>ymd("192012")</code> to see what happens when we give it something more ambiguous. We surround the number with quotes again, just to be consistent with the way most dates are represented (as character strings).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">ymd</span>(<span class="st">"192012"</span>)</code></pre>
+<pre><code>## Warning: All formats failed to parse. No formats found.</code></pre>
+<pre><code>## [1] NA</code></pre>
+<p>We got a warning message because it was unclear what date you wanted. When in doubt, it’s best to be more explicit. Lets repeat the same command, but add two dashes OR two forward slashes to “192012” so that it’s clear we want January 2, 1920.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="co"># or ymd("1920-1-2")</span>
+<span class="kw">ymd</span>(<span class="st">"1920/1/2"</span>)</code></pre>
+<pre><code>## [1] "1920-01-02 UTC"</code></pre>
+</div>
+<div id="parsing-date-times" class="section level3">
+<h3>Parsing date-times</h3>
+<p>In addition to dates, we can parse date-times. Lets created a date-time object called dt1 and we parse it with <code>ymd_hms()</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">dt1 &lt;-<span class="st"> '2014-08-23 17:23:02'</span>
+
+<span class="kw">ymd_hms</span>(dt1)</code></pre>
+<pre><code>## [1] "2014-08-23 17:23:02 UTC"</code></pre>
+<p>What if we have a time, but no date? Lets use the appropriate lubridate function to parse “03:22:14” (hh:mm:ss).</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">hms</span>(<span class="st">"03:22:14"</span>)</code></pre>
+<pre><code>## [1] "3H 22M 14S"</code></pre>
+<p>lubridate is also capable of handling vectors of dates, which is particularly helpful when you need to parse an entire column of data.</p>
+<pre class="sourceCode r"><code class="sourceCode r">dt2 &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">'2014-05-14'</span>, <span class="st">'2014-09-22'</span>, <span class="st">'2014-07-11'</span>)
+
+<span class="kw">ymd</span>(dt2)</code></pre>
+<pre><code>## [1] "2014-05-14 UTC" "2014-09-22 UTC" "2014-07-11 UTC"</code></pre>
+</div>
+<div id="update-date-time" class="section level3">
+<h3>Update date-time</h3>
+<p>The <code>update()</code> function allows us to update one or more components of a date-time. For example, let’s say the current time is 08:34:55 (hh:mm:ss). Lets update <code>this_moment</code> to the new time using <code>update(this_moment, hours = 8, minutes = 34, seconds = 55).</code></p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">update</span>(this_moment, <span class="dt">hours =</span> <span class="dv">8</span>, <span class="dt">minutes =</span> <span class="dv">34</span>, <span class="dt">seconds =</span> <span class="dv">55</span>)</code></pre>
+<pre><code>## [1] "2015-08-09 08:34:55 EDT"</code></pre>
+<p>Lets <code>update()</code> <code>this_moment</code>, so that it contain the new time.</p>
+<pre class="sourceCode r"><code class="sourceCode r">this_moment &lt;-<span class="st"> </span><span class="kw">update</span>(this_moment, <span class="dt">hours =</span> <span class="dv">11</span>, <span class="dt">minutes =</span> <span class="dv">55</span>, <span class="dt">seconds =</span> <span class="dv">0</span>)
+this_moment</code></pre>
+<pre><code>## [1] "2015-08-09 11:55:00 EDT"</code></pre>
+</div>
+<div id="dst-and-time-zones-and-arithmetic-operations" class="section level3">
+<h3>DST and time zones and arithmetic operations</h3>
+<p>Now, lets pretend you are in New York City and you are planning to visit a friend in Hong Kong. You seem to have misplaced your itinerary, but you know that your flight departs New York at 17:34 (5:34pm) the day after tomorrow. You also know that your flight is scheduled to arrive in Hong Kong exactly 15 hours and 50 minutes after departure.</p>
+<p>Let’s reconstruct your itinerary from what you can remember, starting with the full date and time of your departure. We will approach this by finding the current date in New York, adding 2 full days, then setting the time to 17:34.</p>
+<p>To find the current date in New York, we’’ll use the <code>now()</code> function again. This time, however, we’ll specify the time zone that we want: <code>"America/New_York"</code>. “For a complete list of valid time zones for use with lubridate, check out the following Wikipedia <em><a href="http://en.wikipedia.org/wiki/List_of_tz_database_time_zones" class="uri">http://en.wikipedia.org/wiki/List_of_tz_database_time_zones</a></em>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">nyc &lt;-<span class="st"> </span><span class="kw">now</span>(<span class="st">"America/New_York"</span>)
+nyc</code></pre>
+<pre><code>## [1] "2015-08-09 11:19:08 EDT"</code></pre>
+<p>Your flight is the day after tomorrow (in New York time), so we want to add two days to nyc. One nice aspect of lubridate is that it allows you to use arithmetic operators on dates and times. In this case, we’d like to add two days to nyc, so we can use the following expression: <code>nyc + days(2)</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">depart &lt;-<span class="st"> </span>nyc +<span class="st"> </span><span class="kw">days</span>(<span class="dv">2</span>)
+depart</code></pre>
+<pre><code>## [1] "2015-08-11 11:19:08 EDT"</code></pre>
+<p>So now depart contains the date of the day after tomorrow. We use <code>update()</code> to add the correct <code>hours (17)</code> and <code>minutes (34)</code> to depart. Reassign the result to depart.</p>
+<pre class="sourceCode r"><code class="sourceCode r">depart &lt;-<span class="st"> </span><span class="kw">update</span>(depart, <span class="dt">hours =</span> <span class="dv">17</span>, <span class="dt">minutes =</span> <span class="dv">34</span>)
+depart</code></pre>
+<pre><code>## [1] "2015-08-11 17:34:08 EDT"</code></pre>
+<p>Your friend wants to know what time she should pick you up from the airport in Hong Kong. Now that we have the exact date and time of your departure from New York, we can figure out the exact time of your arrival in Hong Kong.</p>
+<p>The first step is to add 15 hours and 50 minutes to your departure time. Recall that <code>nyc + days(2)</code> added two days to the current time in New York. Use the same approach to add 15 hours and 50 minutes to the date-time stored in depart.</p>
+<pre class="sourceCode r"><code class="sourceCode r">arrive &lt;-<span class="st"> </span>depart +<span class="st"> </span><span class="kw">hours</span>(<span class="dv">15</span>) +<span class="st"> </span><span class="kw">minutes</span>(<span class="dv">50</span>)
+arrive</code></pre>
+<pre><code>## [1] "2015-08-12 09:24:08 EDT"</code></pre>
+<p>The arrive variable contains the time that it will be in New York when you arrive in Hong Kong. What we really want to know is what time is will be in Hong Kong when you arrive, so that your friend knows when to meet you.</p>
+<p>The <code>with_tz()</code> function returns a date-time as it would appear in another time zone. We use <code>with_tz()</code> to convert arrive to the <em>“Asia/Hong_Kong”</em> time zone.</p>
+<pre class="sourceCode r"><code class="sourceCode r">arrive &lt;-<span class="st"> </span><span class="kw">with_tz</span>(arrive, <span class="st">"Asia/Hong_Kong"</span>)
+arrive</code></pre>
+<pre><code>## [1] "2015-08-12 21:24:08 HKT"</code></pre>
+</div>
+<div id="date-time-interval" class="section level3">
+<h3>Date-time interval</h3>
+<p>Fast forward to your arrival in Hong Kong. You and your friend have just met at the airport and you realize that the last time you were together was in Singapore on June 17, 2008. Naturally, you’d like to know exactly how long it has been. We only need to use the appropriate lubridate function to parse “June 17, 2008”. This time, however, we should specify an extra argument, <code>tz = "Singapore"</code>.</p>
+<pre class="sourceCode r"><code class="sourceCode r">last_time &lt;-<span class="st"> </span><span class="kw">mdy</span>(<span class="st">"June 17, 2008"</span>, <span class="dt">tz =</span> <span class="st">"Singapore"</span>)
+last_time</code></pre>
+<pre><code>## [1] "2008-06-17 SGT"</code></pre>
+<p>We can create a <code>new_interval()</code> that spans from <code>last_time</code> to <code>arrive</code></p>
+<pre class="sourceCode r"><code class="sourceCode r">how_long &lt;-<span class="st"> </span><span class="kw">new_interval</span>(last_time, arrive)
+how_long</code></pre>
+<pre><code>## [1] 2008-06-17 SGT--2015-08-12 21:24:08 SGT</code></pre>
+<p>Now use <code>as.period()</code> to see how long it’s been.</p>
+<pre class="sourceCode r"><code class="sourceCode r"><span class="kw">as.period</span>(how_long)</code></pre>
+<pre><code>## Warning in Ops.factor(left, right): '-' not meaningful for factors</code></pre>
+<pre><code>## [1] "7y 1m 26d 21H 24M 8.27182102203369S"</code></pre>
+<p>This is where things get a little tricky. Because of things like leap years, leap seconds, and daylight savings time, the length of any given minute, day, month, week, or year is relative to when it occurs. In contrast, the length of a second is always the same, regardless of when it occurs.</p>
+<p>To address these complexities, the authors of lubridate introduce four classes of time related objects: <code>instants</code>, <code>intervals</code>, <code>durations</code>, and <code>periods</code>. These topics are beyond the scope of this lesson, but you can find a complete discussion in the <strong>2011 Journal of Statistical Software paper titled ‘Dates and Times Made Easy with lubridate’</strong></p>
+</div>
+</div>
+<div id="reference" class="section level2">
+<h2>Reference</h2>
+<ul>
+<li>Adapted based on the data cleaning lesson in swirl courses.</li>
+</ul>
+</div>
+
+<script type="text/javascript">
+window.onload = function() {
+  var i, fig = 1, caps = document.getElementsByClassName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.className !== 'figure' || cap.nodeName !== 'P')
+      continue;
+    cap.innerHTML = '<span>Figure ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+  fig = 1;
+  caps = document.getElementsByTagName('caption');
+  for (i = 0; i < caps.length; i++) {
+    var cap = caps[i];
+    if (cap.parentElement.nodeName !== 'TABLE') continue;
+    cap.innerHTML = '<span>Table ' + fig + ':</span> ' + cap.innerHTML;
+    fig++;
+  }
+}
+</script>
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+
+
+</body></html>

@@ -1,0 +1,8 @@
+"0","# Create new columns hour, month and rainy"
+"0","akl_hourly <- akl_hourly %>%"
+"0","  mutate("
+"0","    hour = hour(datetime),"
+"0","    month = month(datetime, label = TRUE),"
+"0","    rainy = weather == ""Precipitation"""
+"0","  )"
+"0",""

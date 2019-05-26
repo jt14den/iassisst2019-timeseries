@@ -1,0 +1,175 @@
+---
+title: "Intro to Lubridate"
+author: "Tim Dennis"
+date: "5/23/2019"
+output: html_document
+---
+```{r setup}
+library(ggplot2)
+library(dplyr)
+library(lubridate)
+```
+
+## Learning Objectives
+
+* Know and show difference between a date and time
+* basic date math  
+* practical lubridate examples - convert strings to dates, filter data frame by month,
+* time of day, etc.
+* ggplot - show how to format date labels properly (e.g by first day of month, or week)
+* ggplot - geom_smooth (e.g. loess)
+
+
+## BASE - R Specifying dates
+
+* R doesn't know something is a date unless you tell it.
+* If you have a character string that represents a date in the **ISO 8601** standard you can turn it into a Date using the as.Date() function.
+* pass the character string (or a vector of character strings) as the first argument.
+
+```{r r-release}
+# The date R 3.0.0 was released
+x <- "2013-04-03"
+```
+
+```{r use-str}
+
+# Examine structure of x
+str(x)
+```
+
+
+### Use as.Date() to interpret x as a date
+```{r make-a-date}
+x_date <- as.Date(x)
+```
+
+### Examine structure of x_date
+```{r examine-date}
+str(x_date)
+```
+
+### Store April 10 2014 as a Date
+```{r store-date}
+april_10_2014 <- as.Date('2014-04-10')
+```
+
+## Datetimes in R
+
+"To parse, in computer science, is where a string of commands – usually a program – is separated into more easily processed components, which are analyzed for correct syntax and then attached to tags that define each component. The computer can then process each program chunk and transform it into machine language." https://www.techopedia.com/definition/3853/parse
+
+* ISO 8601 - https://en.wikipedia.org/wiki/ISO_8601
+* POSITlt - list with named components
+* POSITct - seconds since 1970-01-01 00:00:00
+* POSITct will go in dataframes
+* as.POSITct
+
+## Getting datetimes into R (base R)
+
+* like dates without times, if you want R to recognize a string as a datetime you need to convert it, although now you use as.POSIXct().
+* as.POSIXct() expects strings to be in the format YYYY-MM-DD HH:MM:SS.
+* will be interpreted as local time based on your machine
+* check timezone with `Sys.timezone`
+* to change timezone you can use set tz argument in `as.POSIXct`
+
+### Use as.POSIXct to enter the datetime
+
+```{r time-date}
+as.POSIXct("2010-10-01 12:12:00")
+```
+
+###  Use as.POSIXct again but set the timezone to `"America/Los_Angeles"`
+
+```{r timzone-set}
+as.POSIXct("2010-10-01 12:12:00", tz = "America/Los_Angeles")
+```
+
+# Use read_csv to import rversions.csv
+
+```{r read-data}
+releases <- read_csv("https://assets.datacamp.com/production/course_5348/datasets/rversions.csv")
+```
+
+# Examine structure of datetime column
+
+```{r examine-datitime}
+str(releases$datetime)
+```
+
+
+##  Why lubridate?
+* Designed to make working with dates in times easier
+* It is part of the `tidyverse` package
+* Plays nicely with other tidyverse packages
+
+They have consistent behavior regardless of underlying object
+
+```{r}
+library(lubridate)
+
+```
+
+* lubridate contains many useful functions. 
+* We’ll only be covering the basics here. Type help(package = lubridate) to bring up an overview of the package, including the package DESCRIPTION, a list of available functions, and a link to the official package vignette.
+* `today()` function returns today's date
+
+```{r todays-date}
+#lets store in a var called `this_day`
+this_day <- today()
+this_day
+```
+
+# Pull out information from the date object
+
+Lubricate gives you functions `year()`, `month()`, or `day()`. Let's use these functions on `this_day`
+
+```{r}
+y <- year(this_day)
+m <- month(this_day)
+d <- day(this_day)
+```
+
+```{r}
+rbind(y,m,d)
+```
+
+another function available is `wday()`, `mday', & `yday` for week day, month, and year. These return the numeric of those date parts:
+
+```{r}
+w <- wday(this_day)
+m <- mday(this_day)
+y <- yday(this_day)
+
+
+rbind(w,m,y)
+```
+
+we can add another argument `label = TRUE` to inicate we want the name of weekday;.
+
+```{r}
+wday(this_day, label = TRUE)
+```
+
+## Date-time
+
+Lubridate handles times with dates as well - referred as date-time. The `now()` function 
+let's use
+
+```{r}
+this_moment <- now()
+this_moment
+```
+
+Just like with dates we can extract the year, month, day, or day of week. We can also use `hour()`, `minute()`, and `second()`.
+
+```{r}
+hr <- hour(this_moment)
+min <- minute(this_moment)
+sec <- second(this_moment)
+
+rbind(hr,min,sec)
+```
+
+## Parsing dates 
+
+When we work with dates they can come in many formats in our data. Lubridate let's us parse these into date & date-time objects in R so we can work with them as dates. 
+

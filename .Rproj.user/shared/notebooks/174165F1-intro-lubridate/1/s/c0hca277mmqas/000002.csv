@@ -1,0 +1,16 @@
+"0","# Import ""akl_weather_hourly_2016.csv"""
+"0","akl_hourly_raw <- read_csv(""https://assets.datacamp.com/production/course_5348/datasets/akl_weather_hourly_2016.csv"")"
+"2","Parsed with column specification:
+cols(
+  year = [32mcol_double()[39m,
+  month = [32mcol_double()[39m,
+  mday = [32mcol_double()[39m,
+  time = [34mcol_time(format = """")[39m,
+  temperature = [32mcol_double()[39m,
+  weather = [31mcol_character()[39m,
+  conditions = [31mcol_character()[39m,
+  events = [31mcol_character()[39m,
+  humidity = [32mcol_double()[39m,
+  date_utc = [34mcol_datetime(format = """")[39m
+)
+"

@@ -1,0 +1,6 @@
+"0","# Add columns for year, yday and month"
+"0","akl_daily <- akl_daily %>%"
+"0","  mutate("
+"0","    year = year(date),"
+"0","    yday = yday(date),"
+"0","    month = month(date, label = TRUE))"

@@ -1,0 +1,4 @@
+"0","# Plot to check work"
+"0","ggplot(akl_hourly, aes(x = datetime, y = temperature)) +"
+"0","  geom_line()"
+"0",""

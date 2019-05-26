@@ -1,0 +1,6 @@
+"0","# Summarise for each date if there is any rain"
+"0","rainy_days <- akl_day %>% "
+"0","  group_by(month, date) %>%"
+"0","  summarise("
+"0","    any_rain = any(rainy)"
+"0","  )"

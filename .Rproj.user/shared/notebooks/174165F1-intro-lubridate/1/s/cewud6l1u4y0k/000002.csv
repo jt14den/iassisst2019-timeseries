@@ -1,0 +1,6 @@
+"0","# Create day_hour, datetime rounded down to hour"
+"0","akl_hourly <- akl_hourly %>%"
+"0","  mutate("
+"0","    day_hour = floor_date(datetime, unit = ""hour"")"
+"0","  )"
+"0",""

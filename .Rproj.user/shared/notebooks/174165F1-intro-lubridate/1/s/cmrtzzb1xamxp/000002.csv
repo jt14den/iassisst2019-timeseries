@@ -1,0 +1,4 @@
+"0","# Examine distribtion of max_temp by month"
+"0","ggplot(akl_daily, aes(x = max_temp, y = month, height = ..density..)) +"
+"0","  geom_density_ridges(stat = ""density"")"
+"0",""

@@ -1,0 +1,7 @@
+"0","# Parse datetime_string "
+"0","akl_hourly <- akl_hourly  %>% "
+"0","  mutate("
+"0","    datetime_string = paste(date, time, sep = ""T""),"
+"0","    datetime = ymd_hms(datetime_string)"
+"0","  )"
+"0",""
