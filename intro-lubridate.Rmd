@@ -21,6 +21,7 @@ library(rmdformats)
 **Credits:  Primarily taken from <https://rpubs.com/joelrudinas03/422499> & Charlotte Wickham's Lubridate Lesson on DataCamp** 
 
 **Lubridate Cheatsheet** <https://rawgit.com/rstudio/cheatsheets/master/lubridate.pdf>
+**Etherpad** 
 
 ## Learning Objectives
 
