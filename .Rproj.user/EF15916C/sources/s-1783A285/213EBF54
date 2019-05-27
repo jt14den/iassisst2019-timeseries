@@ -1,0 +1,33 @@
+{
+    "collab_server" : "",
+    "contents" : "",
+    "created" : 1558924189481.000,
+    "dirty" : false,
+    "encoding" : "",
+    "folds" : "",
+    "hash" : "0",
+    "id" : "213EBF54",
+    "lastKnownWriteTime" : 3618138957305427773,
+    "last_content_update" : 1558924189481,
+    "path" : null,
+    "project_path" : null,
+    "properties" : {
+        "cacheKey" : "71B66621",
+        "caption" : "akl_hourly",
+        "contentUrl" : "grid_resource/gridviewer.html?env=&obj=akl_hourly&cache_key=71B66621",
+        "displayedObservations" : 17454,
+        "environment" : "",
+        "expression" : "akl_hourly",
+        "object" : "akl_hourly",
+        "preview" : 0,
+        "totalObservations" : 17454,
+        "variables" : 16
+    },
+    "read_only" : false,
+    "read_only_alternatives" : [
+    ],
+    "relative_order" : 2,
+    "source_on_save" : false,
+    "source_window" : "",
+    "type" : "r_dataframe"
+}

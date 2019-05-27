@@ -1,5 +1,0 @@
-"0","# Find day_hours with n != 2 "
-"0","akl_hourly %>% "
-"0","  count(day_hour) %>%"
-"0","  filter(n != 2) %>% "
-"0","  arrange(desc(n))"

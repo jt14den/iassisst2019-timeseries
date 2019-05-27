@@ -454,7 +454,6 @@ library(ggridges)
 ```
 
 * Use `mutate()` to create three new columns: `year`, `yday` and `month` that respectively hold the same components of the date column. Don’t forget to label the months with their names.
-* 
 
 ```{r add-date-cols, eval=FALSE}
 # Add columns for year, yday and month
@@ -482,7 +481,7 @@ akl_daily
 
 ```{r plot-yday-max, eval=FALSE}
 ggplot(akl_daily, aes(x = yday, y = max_temp)) +
-  geom_line(aes(group = year), alpha = 0.5)
+  geom_line(aes(group = year), alpha = 0.5) #add color = year
 ```
 
 * To take an alternate look, create a ridgeline plot(formerly known as a joyplot) with max_temp on the x-axis, month on the y-axis, using geom_density_ridges() from the ggridges package.
@@ -557,9 +556,9 @@ head(release_time) %>% hour()
 
 ```
 
-* floor_date() takes a date-time object and rounds it down to the nearest boundary of the specified time unit.
-* ceiling_date() takes a date-time object and rounds it up to the nearest boundary of the specified time unit.
-* If we use floor_date. It will result into something like this:
+* `floor_date()` takes a date-time object and rounds it down to the nearest boundary of the specified time unit.
+* `ceiling_date()` takes a date-time object and rounds it up to the nearest boundary of the specified time unit.
+* If we use `floor_date`. It will result into something like this:
 
 ```{r}
 head(release_time) %>% floor_date(unit = "hour")
@@ -583,33 +582,51 @@ floor_date() - rounds down
 ## Practice Rounding
 Choose the right function and units to round r_3_4_1 down to the nearest day
 
-Choose the right function and units to round r_3_4_1 to the nearest 5 minutes
-
-Choose the right function and units to round r_3_4_1 up to the nearest week
-
-Find the time elapsed on the day of release at the time of release by subtracting r_3_4_1 rounded down to the day from r_3_4_1
-
 ```{r}
 r_3_4_1 <- ymd_hms("2016-05-03 07:13:28 UTC")
 
 ```
 
-```{r}
+```{r round-down, eval=FALSE}
+# Round down to day
+floor_date(r_3_4_1, unit = "___")
+```
+
+```{r round-down-sol, include=FALSE}
 # Round down to day
 floor_date(r_3_4_1, unit = "day")
 ```
+Choose the right function and units to round r_3_4_1 to the nearest 5 minutes
 
-```{r}
+
+```{r nearest-5min, eval=FALSE}
+# Round to nearest 5 minutes
+round_date(r_3_4_1, unit = "______")
+
+```
+
+```{r nearest-5min-sol, include=FALSE}
 # Round to nearest 5 minutes
 round_date(r_3_4_1, unit = "5 minutes")
 
 ```
+Choose the right function and units to round r_3_4_1 up to the nearest week
+```{r round-up-week, eval=FALSE}
+# Round up to week
+ceiling_date(r_3_4_1, unit = "____")
 
-```{r}
+```
+```{r round-up-week-sol, include=FALSE}
 # Round up to week
 ceiling_date(r_3_4_1, unit = "week")
 
 ```
+
+* Find the time elapsed on the day of release at the time of release by subtracting r_3_4_1 rounded down to the day from r_3_4_1
+```{r}
+floor_date(r_3_4_1, unit = "day")
+```
+
 
 ```{r}
 # Subtract r_3_4_1 rounded down to day
@@ -630,7 +647,7 @@ akl_hourly <- akl_hourly %>%
 
 ```
 
-Use count() on day_hour to count how many observations there are in each hour
+Use `count()` on day_hour to count how many observations there are in each hour
 
 ```{r}
 # Count observations per hour  
