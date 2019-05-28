@@ -10,6 +10,7 @@ University of California, Los Angeles
 
 ## Course Materials 
 
+* Etherpad - notes from the course: <https://pad.carpentries.org/iassist2019-timeseries>
 * Intro to Lubridate:  <https://jt14den.github.io/iassisst2019-timeseries/intro-lubridate.html>
    * The RMarkdown file for this html file is in this repo: [intro-lubridate.Rmd](intro-lubridate.Rmd)
 
