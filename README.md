@@ -11,5 +11,6 @@ University of California, Los Angeles
 ## Course Materials 
 
 * Intro to Lubridate:  <https://jt14den.github.io/iassisst2019-timeseries/intro-lubridate.html>
+   * The RMarkdown file for this html file is in this repo: <intro-lubridate.Rmd>
 
 
